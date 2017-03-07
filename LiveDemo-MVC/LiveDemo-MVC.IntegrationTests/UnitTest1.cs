@@ -20,5 +20,18 @@ namespace LiveDemo_MVC.IntegrationTests
             // Assert
             Assert.AreEqual(1, usersCount);
         }
+
+        [TestMethod]
+        public void TestMethod2()
+        {
+            // Arrange
+            ApplicationDbContext context = new ApplicationDbContext();
+
+            // Act
+            int rolesCount = context.Roles.Count();
+
+            // Assert
+            Assert.AreEqual(0, rolesCount);
+        }
     }
 }
