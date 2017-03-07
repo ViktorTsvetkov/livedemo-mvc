@@ -50,5 +50,12 @@ namespace LiveDemo_MVC.UnitTests.Controllers
             // Assert
             Assert.IsNotNull(result);
         }
+
+        [TestMethod]
+        public void Test()
+        {
+            // Arrange & Act & Assert
+            Assert.IsTrue(true);
+        }
     }
 }
