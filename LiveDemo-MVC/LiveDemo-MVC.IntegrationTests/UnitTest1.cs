@@ -18,7 +18,7 @@ namespace LiveDemo_MVC.IntegrationTests
             int usersCount = context.Users.Count();
 
             // Assert
-            Assert.AreEqual(0, usersCount);
+            Assert.AreEqual(1, usersCount);
         }
     }
 }
