@@ -64,5 +64,12 @@ namespace LiveDemo_MVC.UnitTests.Controllers
             // Arrange & Act & Assert
             Assert.IsFalse(false);
         }
+
+        [TestMethod]
+        public void Test3()
+        {
+            // Arrange & Act & Assert
+            Assert.IsTrue(true);
+        }
     }
 }
