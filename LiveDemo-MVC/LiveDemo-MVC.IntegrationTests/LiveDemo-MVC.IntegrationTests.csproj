@@ -71,6 +71,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LiveDemo-MVC.Auth\LiveDemo-MVC.Auth.csproj">
+      <Project>{d66cb072-3ef6-468d-b5c2-1107e929c505}</Project>
+      <Name>LiveDemo-MVC.Auth</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LiveDemo-MVC\LiveDemo-MVC.csproj">
       <Project>{27bbadef-14a3-46ef-9896-24ff051ced69}</Project>
       <Name>LiveDemo-MVC</Name>

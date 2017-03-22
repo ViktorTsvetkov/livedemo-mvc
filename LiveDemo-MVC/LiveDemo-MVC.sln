@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveDemo-MVC.UnitTests", "L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveDemo-MVC.IntegrationTests", "LiveDemo-MVC.IntegrationTests\LiveDemo-MVC.IntegrationTests.csproj", "{5DEEC228-8F28-4386-84ED-BEFE54A24B21}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Auth", "Auth", "{A7C53BD9-DB30-48D6-ADDE-E0E6DBC69E6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveDemo-MVC.Auth", "LiveDemo-MVC.Auth\LiveDemo-MVC.Auth.csproj", "{D66CB072-3EF6-468D-B5C2-1107E929C505}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,8 +31,15 @@ Global
 		{5DEEC228-8F28-4386-84ED-BEFE54A24B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DEEC228-8F28-4386-84ED-BEFE54A24B21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DEEC228-8F28-4386-84ED-BEFE54A24B21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D66CB072-3EF6-468D-B5C2-1107E929C505}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D66CB072-3EF6-468D-B5C2-1107E929C505}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D66CB072-3EF6-468D-B5C2-1107E929C505}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D66CB072-3EF6-468D-B5C2-1107E929C505}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D66CB072-3EF6-468D-B5C2-1107E929C505} = {A7C53BD9-DB30-48D6-ADDE-E0E6DBC69E6B}
 	EndGlobalSection
 EndGlobal

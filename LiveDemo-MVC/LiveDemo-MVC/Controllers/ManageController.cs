@@ -1,53 +1,24 @@
-﻿using System;
+﻿using LiveDemo_MVC.Auth.Contracts;
+using LiveDemo_MVC.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using LiveDemo_MVC.Models;
 
 namespace LiveDemo_MVC.Controllers
 {
     [Authorize]
     public class ManageController : Controller
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
+        private readonly ISignInService signInService;
+        private readonly IUserService userService;
 
-        public ManageController()
+        public ManageController(ISignInService signInService, IUserService userService)
         {
-        }
-
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-        }
-
-        public ApplicationSignInManager SignInManager
-        {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set 
-            { 
-                _signInManager = value; 
-            }
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
+            this.signInService = signInService;
+            this.userService = userService;
         }
 
         //
@@ -67,9 +38,9 @@ namespace LiveDemo_MVC.Controllers
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
-                PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
-                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
-                Logins = await UserManager.GetLoginsAsync(userId),
+                PhoneNumber = await this.userService.GetPhoneNumberAsync(userId),
+                TwoFactor = await this.userService.GetTwoFactorEnabledAsync(userId),
+                Logins = await this.userService.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
             return View(model);
@@ -82,13 +53,13 @@ namespace LiveDemo_MVC.Controllers
         public async Task<ActionResult> RemoveLogin(string loginProvider, string providerKey)
         {
             ManageMessageId? message;
-            var result = await UserManager.RemoveLoginAsync(User.Identity.GetUserId(), new UserLoginInfo(loginProvider, providerKey));
+            var result = await this.userService.RemoveLoginAsync(User.Identity.GetUserId(), new UserLoginInfo(loginProvider, providerKey));
             if (result.Succeeded)
             {
-                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                var user = await this.userService.FindByIdAsync(User.Identity.GetUserId());
                 if (user != null)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    await this.signInService.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
                 message = ManageMessageId.RemoveLoginSuccess;
             }
@@ -117,15 +88,15 @@ namespace LiveDemo_MVC.Controllers
                 return View(model);
             }
             // Generate the token and send it
-            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number);
-            if (UserManager.SmsService != null)
+            var code = await this.userService.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number);
+            if (this.userService.SmsService != null)
             {
                 var message = new IdentityMessage
                 {
                     Destination = model.Number,
                     Body = "Your security code is: " + code
                 };
-                await UserManager.SmsService.SendAsync(message);
+                await this.userService.SmsService.SendAsync(message);
             }
             return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Number });
         }
@@ -136,11 +107,11 @@ namespace LiveDemo_MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EnableTwoFactorAuthentication()
         {
-            await UserManager.SetTwoFactorEnabledAsync(User.Identity.GetUserId(), true);
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            await this.userService.SetTwoFactorEnabledAsync(User.Identity.GetUserId(), true);
+            var user = await this.userService.FindByIdAsync(User.Identity.GetUserId());
             if (user != null)
             {
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                await this.signInService.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
             return RedirectToAction("Index", "Manage");
         }
@@ -151,11 +122,11 @@ namespace LiveDemo_MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DisableTwoFactorAuthentication()
         {
-            await UserManager.SetTwoFactorEnabledAsync(User.Identity.GetUserId(), false);
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            await this.userService.SetTwoFactorEnabledAsync(User.Identity.GetUserId(), false);
+            var user = await this.userService.FindByIdAsync(User.Identity.GetUserId());
             if (user != null)
             {
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                await this.signInService.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
             return RedirectToAction("Index", "Manage");
         }
@@ -164,7 +135,7 @@ namespace LiveDemo_MVC.Controllers
         // GET: /Manage/VerifyPhoneNumber
         public async Task<ActionResult> VerifyPhoneNumber(string phoneNumber)
         {
-            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), phoneNumber);
+            var code = await this.userService.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), phoneNumber);
             // Send an SMS through the SMS provider to verify the phone number
             return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
         }
@@ -179,13 +150,13 @@ namespace LiveDemo_MVC.Controllers
             {
                 return View(model);
             }
-            var result = await UserManager.ChangePhoneNumberAsync(User.Identity.GetUserId(), model.PhoneNumber, model.Code);
+            var result = await this.userService.ChangePhoneNumberAsync(User.Identity.GetUserId(), model.PhoneNumber, model.Code);
             if (result.Succeeded)
             {
-                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                var user = await this.userService.FindByIdAsync(User.Identity.GetUserId());
                 if (user != null)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    await this.signInService.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
                 return RedirectToAction("Index", new { Message = ManageMessageId.AddPhoneSuccess });
             }
@@ -200,15 +171,15 @@ namespace LiveDemo_MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemovePhoneNumber()
         {
-            var result = await UserManager.SetPhoneNumberAsync(User.Identity.GetUserId(), null);
+            var result = await this.userService.SetPhoneNumberAsync(User.Identity.GetUserId(), null);
             if (!result.Succeeded)
             {
                 return RedirectToAction("Index", new { Message = ManageMessageId.Error });
             }
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            var user = await this.userService.FindByIdAsync(User.Identity.GetUserId());
             if (user != null)
             {
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                await this.signInService.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
         }
@@ -230,13 +201,13 @@ namespace LiveDemo_MVC.Controllers
             {
                 return View(model);
             }
-            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+            var result = await this.userService.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
-                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                var user = await this.userService.FindByIdAsync(User.Identity.GetUserId());
                 if (user != null)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    await this.signInService.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
@@ -259,13 +230,13 @@ namespace LiveDemo_MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
+                var result = await this.userService.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
                 if (result.Succeeded)
                 {
-                    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                    var user = await this.userService.FindByIdAsync(User.Identity.GetUserId());
                     if (user != null)
                     {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        await this.signInService.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     }
                     return RedirectToAction("Index", new { Message = ManageMessageId.SetPasswordSuccess });
                 }
@@ -284,12 +255,12 @@ namespace LiveDemo_MVC.Controllers
                 message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : "";
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            var user = await this.userService.FindByIdAsync(User.Identity.GetUserId());
             if (user == null)
             {
                 return View("Error");
             }
-            var userLogins = await UserManager.GetLoginsAsync(User.Identity.GetUserId());
+            var userLogins = await this.userService.GetLoginsAsync(User.Identity.GetUserId());
             var otherLogins = AuthenticationManager.GetExternalAuthenticationTypes().Where(auth => userLogins.All(ul => auth.AuthenticationType != ul.LoginProvider)).ToList();
             ViewBag.ShowRemoveButton = user.PasswordHash != null || userLogins.Count > 1;
             return View(new ManageLoginsViewModel
@@ -318,16 +289,15 @@ namespace LiveDemo_MVC.Controllers
             {
                 return RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
             }
-            var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
+            var result = await this.userService.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && _userManager != null)
+            if (disposing && this.userService != null)
             {
-                _userManager.Dispose();
-                _userManager = null;
+                this.userService.Dispose();
             }
 
             base.Dispose(disposing);
@@ -355,7 +325,7 @@ namespace LiveDemo_MVC.Controllers
 
         private bool HasPassword()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
+            var user = this.userService.FindById(User.Identity.GetUserId());
             if (user != null)
             {
                 return user.PasswordHash != null;
@@ -365,7 +335,7 @@ namespace LiveDemo_MVC.Controllers
 
         private bool HasPhoneNumber()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
+            var user = this.userService.FindById(User.Identity.GetUserId());
             if (user != null)
             {
                 return user.PhoneNumber != null;

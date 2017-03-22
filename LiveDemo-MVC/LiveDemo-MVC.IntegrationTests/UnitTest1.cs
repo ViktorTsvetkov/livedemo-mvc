@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LiveDemo_MVC.Models;
+using LiveDemo_MVC.Auth.Models;
 
 namespace LiveDemo_MVC.IntegrationTests
 {
