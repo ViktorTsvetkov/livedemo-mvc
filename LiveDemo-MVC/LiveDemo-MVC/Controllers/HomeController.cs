@@ -1,4 +1,4 @@
-﻿using Resources;
+﻿using LiveDemo_MVC.App_GlobalResources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
