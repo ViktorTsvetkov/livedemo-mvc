@@ -1,5 +1,8 @@
-﻿using System;
+﻿using LiveDemo_MVC.Data;
+using LiveDemo_MVC.Data.Migrations;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -16,6 +19,8 @@ namespace LiveDemo_MVC
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<LiveDemoEfDbContext, Configuration>());
         }
     }
 }

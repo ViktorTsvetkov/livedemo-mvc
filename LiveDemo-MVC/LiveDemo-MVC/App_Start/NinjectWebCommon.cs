@@ -1,8 +1,14 @@
 using LiveDemo_MVC.Auth;
 using LiveDemo_MVC.Auth.Contracts;
+using LiveDemo_MVC.Data;
+using LiveDemo_MVC.Data.Contracts;
+using LiveDemo_MVC.Data.EfRepository;
+using LiveDemo_MVC.DataServices;
+using LiveDemo_MVC.DataServices.Contracts;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
+using Ninject.Web;
 using Ninject.Web.Common;
 using System;
 using System.Web;
@@ -62,8 +68,13 @@ namespace LiveDemo_MVC.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+            kernel.Bind<ILiveDemoEfDbContextSaveChanges>().To<LiveDemoEfDbContext>().InRequestScope();
+
             kernel.Bind<ISignInService>().ToMethod(_ => HttpContext.Current.GetOwinContext().Get<ApplicationSignInManager>());
             kernel.Bind<IUserService>().ToMethod(_ => HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>());
+
+            kernel.Bind(typeof(IEfDbSetWrapper<>)).To(typeof(EfDbSetWrapper<>));
+            kernel.Bind<IBookService>().To<BookService>();
         }        
     }
 }
