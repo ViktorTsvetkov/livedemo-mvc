@@ -10,6 +10,10 @@ namespace LiveDemo_MVC.DataServices.Models
 {
     public class BookModel
     {
+        public BookModel()
+        {
+        }
+
         public BookModel(Book book)
         {
             this.Id = book.Id;

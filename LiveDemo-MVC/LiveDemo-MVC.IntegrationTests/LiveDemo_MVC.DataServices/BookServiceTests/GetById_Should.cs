@@ -1,15 +1,11 @@
 ﻿using LiveDemo_MVC.App_Start;
 using LiveDemo_MVC.Data;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ninject;
 using LiveDemo_MVC.Data.Models;
 using LiveDemo_MVC.DataServices.Contracts;
 using LiveDemo_MVC.DataServices.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Ninject;
+using System;
 
 namespace LiveDemo_MVC.IntegrationTests.LiveDemo_MVC.DataServices.BookServiceTests
 {
@@ -28,7 +24,7 @@ namespace LiveDemo_MVC.IntegrationTests.LiveDemo_MVC.DataServices.BookServiceTes
 
         private static IKernel kernel;
 
-        [ClassInitialize()]
+        [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
             kernel = NinjectWebCommon.CreateKernel();
@@ -38,7 +34,7 @@ namespace LiveDemo_MVC.IntegrationTests.LiveDemo_MVC.DataServices.BookServiceTes
             dbContext.SaveChanges();
         }
         
-        [ClassCleanup()]
+        [ClassCleanup]
         public static void ClassCleanup()
         {
             LiveDemoEfDbContext dbContext = kernel.Get<LiveDemoEfDbContext>();
@@ -65,6 +61,32 @@ namespace LiveDemo_MVC.IntegrationTests.LiveDemo_MVC.DataServices.BookServiceTes
             Assert.AreEqual(dbModel.Title, result.Title);
             Assert.AreEqual(dbModel.WebSite, result.WebSite);
             Assert.AreEqual(dbModel.Description, result.Description);
+        }
+
+        [TestMethod]
+        public void ReturnNull_WhenIdIsNull()
+        {
+            // Arrange
+            IBookService bookService = kernel.Get<IBookService>();
+
+            // Act
+            BookModel bookModel = bookService.GetById(null);
+
+            // Assert
+            Assert.IsNull(bookModel);
+        }
+
+        [TestMethod]
+        public void ReturnNull_WhenThereIsNoModelWithThePassedId()
+        {
+            // Arrange
+            IBookService bookService = kernel.Get<IBookService>();
+
+            // Act
+            BookModel bookModel = bookService.GetById(Guid.NewGuid());
+
+            // Assert
+            Assert.IsNull(bookModel);
         }
     }
 }

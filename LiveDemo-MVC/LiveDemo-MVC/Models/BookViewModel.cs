@@ -8,6 +8,10 @@ namespace LiveDemo_MVC.Models
 {
     public class BookViewModel
     {
+        public BookViewModel()
+        {
+        }
+
         public BookViewModel(BookModel book)
         {
             if (book != null)
