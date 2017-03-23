@@ -22,6 +22,12 @@ namespace LiveDemo_MVC.App_Start
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
 
+        public static IKernel Kernel
+        {
+            get;
+            private set;
+        }
+
         /// <summary>
         /// Starts the application
         /// </summary>
@@ -44,20 +50,20 @@ namespace LiveDemo_MVC.App_Start
         /// Creates the kernel that will manage your application.
         /// </summary>
         /// <returns>The created kernel.</returns>
-        private static IKernel CreateKernel()
+        public static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel();
+            Kernel = new StandardKernel();
             try
             {
-                kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
-                kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
+                Kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
+                Kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
-                RegisterServices(kernel);
-                return kernel;
+                RegisterServices(Kernel);
+                return Kernel;
             }
             catch
             {
-                kernel.Dispose();
+                Kernel.Dispose();
                 throw;
             }
         }

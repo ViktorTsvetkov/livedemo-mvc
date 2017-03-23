@@ -1,4 +1,6 @@
 ﻿using LiveDemo_MVC.App_GlobalResources;
+using LiveDemo_MVC.Auth.Models;
+using LiveDemo_MVC.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;

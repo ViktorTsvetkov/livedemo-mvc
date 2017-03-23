@@ -51,6 +51,10 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
@@ -67,13 +71,30 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="LiveDemo_MVC.DataServices\BookServiceTests\GetById_Should.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestsInitializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LiveDemo-MVC.Auth\LiveDemo-MVC.Auth.csproj">
       <Project>{d66cb072-3ef6-468d-b5c2-1107e929c505}</Project>
       <Name>LiveDemo-MVC.Auth</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LiveDemo-MVC.Data.Contracts\LiveDemo-MVC.Data.Contracts.csproj">
+      <Project>{2350f916-db40-405f-8b2c-b26b9e6da0dd}</Project>
+      <Name>LiveDemo-MVC.Data.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LiveDemo-MVC.Data.Models\LiveDemo-MVC.Data.Models.csproj">
+      <Project>{062b34f1-094d-4ad1-9daf-88613992b153}</Project>
+      <Name>LiveDemo-MVC.Data.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LiveDemo-MVC.DataServices\LiveDemo-MVC.DataServices.csproj">
+      <Project>{c91cc5b2-d705-41c7-9a23-029fbaa5b4e5}</Project>
+      <Name>LiveDemo-MVC.DataServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LiveDemo-MVC.Data\LiveDemo-MVC.Data.csproj">
+      <Project>{869153bd-e7e5-457b-9fc8-a9448f4032cc}</Project>
+      <Name>LiveDemo-MVC.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\LiveDemo-MVC\LiveDemo-MVC.csproj">
       <Project>{27bbadef-14a3-46ef-9896-24ff051ced69}</Project>
@@ -84,6 +105,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

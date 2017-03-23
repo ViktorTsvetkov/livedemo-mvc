@@ -20,10 +20,14 @@ namespace LiveDemo_MVC.Data
 
         public IDbSet<Book> Books { get; set; }
 
+        public IDbSet<Category> Categories { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            //modelBuilder.Entity<Book>()
+            //    .HasKey(b => b.Id).
+
             modelBuilder.Entity<Book>()
-                .HasKey(b => b.Id)
                 .Property(b => b.Author).IsRequired();
 
             modelBuilder.Entity<Book>()
