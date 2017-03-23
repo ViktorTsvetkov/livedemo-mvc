@@ -1,16 +1,6 @@
 ﻿@model BookViewModel
 
+@Html.DisplayForModel()
 <div>
-    <div>
-        @Html.DisplayFor(m => m.Title)
-    </div>
-    <div>
-       by @Html.DisplayFor(m => m.Author)
-    </div>
-    <div>
-      @Html.DisplayFor(m => m.ISBN)
-    </div>
-    <div>
-       Web site: <a href="@Model.WebSite">@Model.WebSite</a>
-    </div>
+    @Html.ActionLink(GlobalResources.LabelBackToAllBooks, "All")
 </div>

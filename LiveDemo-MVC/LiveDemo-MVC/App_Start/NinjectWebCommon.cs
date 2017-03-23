@@ -81,6 +81,7 @@ namespace LiveDemo_MVC.App_Start
 
             kernel.Bind(typeof(IEfDbSetWrapper<>)).To(typeof(EfDbSetWrapper<>));
             kernel.Bind<IBookService>().To<BookService>();
+            kernel.Bind<ICategoryService>().To<CategoryService>();
         }        
     }
 }

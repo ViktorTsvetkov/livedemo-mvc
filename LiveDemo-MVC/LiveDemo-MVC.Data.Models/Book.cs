@@ -15,5 +15,9 @@ namespace LiveDemo_MVC.Data.Models
         public string WebSite { get; set; }
 
         public string Description { get; set; }
+
+        public Guid CategoryId { get; set; }
+
+        public virtual Category Category { get; set; }
     }
 }

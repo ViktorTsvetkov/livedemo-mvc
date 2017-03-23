@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace LiveDemo_MVC.Data.Contracts
 {
@@ -7,6 +8,8 @@ namespace LiveDemo_MVC.Data.Contracts
         where T : class
     {
         IQueryable<T> All { get; }
+
+        IQueryable<T> AllWithInclude<TProperty>(Expression<Func<T, TProperty>> includeExpression);
 
         T GetById(Guid id);
 

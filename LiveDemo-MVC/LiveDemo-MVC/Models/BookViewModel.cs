@@ -16,6 +16,7 @@ namespace LiveDemo_MVC.Models
         {
             if (book != null)
             {
+                this.Id = book.Id;
                 this.Title = book.Title;
                 this.Author = book.Author;
                 this.ISBN = book.ISBN;
@@ -23,7 +24,9 @@ namespace LiveDemo_MVC.Models
                 this.Description = book.Description;
             }
         }
-        
+
+        public Guid Id { get; set; }
+
         public string Title { get; set; }
 
         public string Author { get; set; }

@@ -106,6 +106,7 @@
   <ItemGroup>
     <Compile Include="LiveDemo_MVC.DataServices\BookServiceTests\Constructor_Should.cs" />
     <Compile Include="LiveDemo_MVC.DataServices\BookServiceTests\GetById_Should.cs" />
+    <Compile Include="LiveDemo_MVC\Controllers\AccountControllerTests\Login_Should.cs" />
     <Compile Include="LiveDemo_MVC\Controllers\BookControllerTests\Constructor_Should.cs" />
     <Compile Include="LiveDemo_MVC\Controllers\BookControllerTests\Details_Should.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -117,6 +118,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LiveDemo-MVC.Auth\LiveDemo-MVC.Auth.csproj">
+      <Project>{d66cb072-3ef6-468d-b5c2-1107e929c505}</Project>
+      <Name>LiveDemo-MVC.Auth</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LiveDemo-MVC.Data.Contracts\LiveDemo-MVC.Data.Contracts.csproj">
       <Project>{2350f916-db40-405f-8b2c-b26b9e6da0dd}</Project>
       <Name>LiveDemo-MVC.Data.Contracts</Name>

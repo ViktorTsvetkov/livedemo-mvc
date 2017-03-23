@@ -4,6 +4,7 @@ using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace LiveDemo_MVC.Data.EfRepository
 {
@@ -27,6 +28,11 @@ namespace LiveDemo_MVC.Data.EfRepository
             {
                 return this.dbSet;
             }
+        }
+
+        public IQueryable<T> AllWithInclude<TProperty>(Expression<Func<T, TProperty>> includeExpression)
+        {
+            return this.All.Include(includeExpression);
         }
 
         public T GetById(Guid id)

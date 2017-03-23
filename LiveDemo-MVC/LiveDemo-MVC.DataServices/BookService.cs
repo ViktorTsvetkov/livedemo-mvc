@@ -4,6 +4,8 @@ using LiveDemo_MVC.Data.Models;
 using LiveDemo_MVC.DataServices.Contracts;
 using LiveDemo_MVC.DataServices.Models;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace LiveDemo_MVC.DataServices
 {
@@ -21,7 +23,7 @@ namespace LiveDemo_MVC.DataServices
             this.bookSetWrapper = bookSetWrapper;
             this.dbContext = dbContext;
         }
-
+        
         public BookModel GetById(Guid? id)
         {
             BookModel result = null;
@@ -36,6 +38,16 @@ namespace LiveDemo_MVC.DataServices
             }
 
             return result;
+        }
+
+        public IEnumerable<BookModel> GetBooksByTitleOrAuthor(string searchTerm)
+        {
+            return string.IsNullOrEmpty(searchTerm) ? this.bookSetWrapper.All.Select(BookModel.Create).ToList()
+                : this.bookSetWrapper.All.Where(b =>
+                (string.IsNullOrEmpty(b.Title) ? false : b.Title.Contains(searchTerm))
+                ||
+                (string.IsNullOrEmpty(b.Author) ? false : b.Author.Contains(searchTerm)))
+                .Select(BookModel.Create).ToList();
         }
     }
 }

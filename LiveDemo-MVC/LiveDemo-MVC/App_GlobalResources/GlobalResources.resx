@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="LabelBackToAllBooks" xml:space="preserve">
+    <value>Back to all books</value>
+  </data>
   <data name="LabelTest" xml:space="preserve">
     <value>This is the beginning!!!</value>
   </data>

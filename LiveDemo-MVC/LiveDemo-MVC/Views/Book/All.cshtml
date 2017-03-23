@@ -1,0 +1,24 @@
+﻿<div class="panel">
+    @using (Ajax.BeginForm("FilteredBooks", new { }, new AjaxOptions()
+    {
+        HttpMethod = "Post",
+        UpdateTargetId = "bookPanel",
+        InsertionMode = InsertionMode.Replace,
+    }, new { id = "ajaxForm" }))
+    {
+        <input type="text" name="searchTerm" />
+    }
+</div>
+<div id="bookPanel" class="panel">
+    @Html.Action("AllBooks")
+</div>
+
+@section scripts {
+    <script>
+        $(function () {
+            $('[name="searchTerm"]').keyup(function () {
+                $('#ajaxForm').submit()
+            })
+        })
+    </script>
+}

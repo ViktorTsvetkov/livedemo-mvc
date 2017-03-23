@@ -61,6 +61,15 @@ namespace LiveDemo_MVC.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back to all books.
+        /// </summary>
+        public static string LabelBackToAllBooks {
+            get {
+                return ResourceManager.GetString("LabelBackToAllBooks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is the beginning!!!.
         /// </summary>
         public static string LabelTest {

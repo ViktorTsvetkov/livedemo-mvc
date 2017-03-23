@@ -16,14 +16,21 @@ namespace LiveDemo_MVC.DataServices.Models
 
         public BookModel(Book book)
         {
-            this.Id = book.Id;
-            this.Title = book.Title;
-            this.Author = book.Author;
-            this.ISBN = book.ISBN;
-            this.WebSite = book.WebSite;
-            this.Description = book.Description;
+            if (book != null)
+            {
+                this.Id = book.Id;
+                this.Title = book.Title;
+                this.Author = book.Author;
+                this.ISBN = book.ISBN;
+                this.WebSite = book.WebSite;
+                this.Description = book.Description;
+                if (book.Category != null)
+                {
+                    this.CategoryId = book.Category.Id;
+                }
+            }
         }
-        
+
         public Guid Id { get; set; }
 
         public string Title { get; set; }
@@ -35,5 +42,25 @@ namespace LiveDemo_MVC.DataServices.Models
         public string WebSite { get; set; }
 
         public string Description { get; set; }
+
+        public CategoryModel Category { get; set; }
+
+        public Guid CategoryId { get; set; }
+
+        public static Expression<Func<Book, BookModel>> Create
+        {
+            get
+            {
+                return book => new BookModel()
+                {
+                    Id = book.Id,
+                    Title = book.Title,
+                    Author = book.Author,
+                    ISBN = book.ISBN,
+                    WebSite = book.WebSite,
+                    Description = book.Description
+                };
+            }
+        }
     }
 }

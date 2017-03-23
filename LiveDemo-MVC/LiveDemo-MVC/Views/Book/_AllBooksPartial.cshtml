@@ -1,0 +1,14 @@
+﻿@model IEnumerable<CategoryViewModel>
+
+<div>
+    @foreach (var category in Model)
+    {
+        <h3>@category.Name</h3>
+        <div class="panel">
+            @foreach (var book in category.Books)
+            {
+                @Html.DisplayFor(c => book)
+            }
+        </div>
+    }
+</div>

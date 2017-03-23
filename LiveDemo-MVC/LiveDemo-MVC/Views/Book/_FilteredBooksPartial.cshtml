@@ -1,0 +1,8 @@
+﻿@model IEnumerable<BookViewModel>
+
+<div class="panel">
+    @foreach (var book in Model)
+    {
+        @Html.DisplayFor(c => book)
+    }
+</div>

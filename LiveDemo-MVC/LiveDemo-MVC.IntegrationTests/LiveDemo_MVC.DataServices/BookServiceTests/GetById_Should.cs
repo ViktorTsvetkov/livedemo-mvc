@@ -6,13 +6,20 @@ using LiveDemo_MVC.DataServices.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ninject;
 using System;
+using System.Linq;
 
 namespace LiveDemo_MVC.IntegrationTests.LiveDemo_MVC.DataServices.BookServiceTests
 {
     [TestClass]
     public class GetById_Should
     {
-        private static Book dbModel = new Book()
+        private static Category dbCategory = new Category()
+        {
+            Id = Guid.NewGuid(),
+            Name = "category"
+        };
+
+        private static Book dbBook = new Book()
         {
             Id = Guid.NewGuid(),
             Author = "author",
@@ -24,23 +31,31 @@ namespace LiveDemo_MVC.IntegrationTests.LiveDemo_MVC.DataServices.BookServiceTes
 
         private static IKernel kernel;
 
-        [ClassInitialize]
-        public static void ClassInit(TestContext context)
+        [TestInitialize]
+        public void TestInit()
         {
             kernel = NinjectWebCommon.CreateKernel();
             LiveDemoEfDbContext dbContext = kernel.Get<LiveDemoEfDbContext>();
             
-            dbContext.Books.Add(dbModel);
+            dbContext.Categories.Add(dbCategory);
+            dbContext.SaveChanges();
+
+            var category = dbContext.Categories.Single();
+            dbBook.CategoryId = category.Id;
+            dbBook.Category = category;
+
+            dbContext.Books.Add(dbBook);
             dbContext.SaveChanges();
         }
         
-        [ClassCleanup]
-        public static void ClassCleanup()
+        [TestCleanup]
+        public void TestCleanup()
         {
             LiveDemoEfDbContext dbContext = kernel.Get<LiveDemoEfDbContext>();
+            
+            dbContext.Categories.Attach(dbCategory);
+            dbContext.Categories.Remove(dbCategory);
 
-            dbContext.Books.Attach(dbModel);
-            dbContext.Books.Remove(dbModel);
             dbContext.SaveChanges();
         }
 
@@ -51,16 +66,16 @@ namespace LiveDemo_MVC.IntegrationTests.LiveDemo_MVC.DataServices.BookServiceTes
             IBookService bookService = kernel.Get<IBookService>();
 
             // Act
-            BookModel result = bookService.GetById(dbModel.Id);
+            BookModel result = bookService.GetById(dbBook.Id);
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(dbModel.Id, result.Id);
-            Assert.AreEqual(dbModel.Author, result.Author);
-            Assert.AreEqual(dbModel.ISBN, result.ISBN);
-            Assert.AreEqual(dbModel.Title, result.Title);
-            Assert.AreEqual(dbModel.WebSite, result.WebSite);
-            Assert.AreEqual(dbModel.Description, result.Description);
+            Assert.AreEqual(dbBook.Id, result.Id);
+            Assert.AreEqual(dbBook.Author, result.Author);
+            Assert.AreEqual(dbBook.ISBN, result.ISBN);
+            Assert.AreEqual(dbBook.Title, result.Title);
+            Assert.AreEqual(dbBook.WebSite, result.WebSite);
+            Assert.AreEqual(dbBook.Description, result.Description);
         }
 
         [TestMethod]

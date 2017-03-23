@@ -17,6 +17,7 @@ namespace LiveDemo_MVC.UnitTests.LiveDemo_MVC.Controllers.BookControllerTests
         {
             // Arrange
             var bookServiceMock = new Mock<IBookService>();
+            var categoryServiceMock = new Mock<ICategoryService>();
             var bookModel = new BookModel() 
             {
                 Id = Guid.NewGuid(),
@@ -31,7 +32,7 @@ namespace LiveDemo_MVC.UnitTests.LiveDemo_MVC.Controllers.BookControllerTests
 
             bookServiceMock.Setup(m => m.GetById(bookModel.Id)).Returns(bookModel);
 
-            BookController bookController = new BookController(bookServiceMock.Object);
+            BookController bookController = new BookController(bookServiceMock.Object, categoryServiceMock.Object);
 
             // Act & Assert
             bookController
@@ -52,13 +53,14 @@ namespace LiveDemo_MVC.UnitTests.LiveDemo_MVC.Controllers.BookControllerTests
         {
             // Arrange
             var bookServiceMock = new Mock<IBookService>();
+            var categoryServiceMock = new Mock<ICategoryService>();
 
             var bookViewModel = new BookViewModel();
 
             Guid? bookId = Guid.NewGuid();
             bookServiceMock.Setup(m => m.GetById(bookId.Value)).Returns((BookModel)null);
 
-            BookController bookController = new BookController(bookServiceMock.Object);
+            BookController bookController = new BookController(bookServiceMock.Object, categoryServiceMock.Object);
 
             // Act & Assert
             bookController
@@ -79,12 +81,13 @@ namespace LiveDemo_MVC.UnitTests.LiveDemo_MVC.Controllers.BookControllerTests
         {
             // Arrange
             var bookServiceMock = new Mock<IBookService>();
+            var categoryServiceMock = new Mock<ICategoryService>();
 
             var bookViewModel = new BookViewModel();
             
             bookServiceMock.Setup(m => m.GetById(null)).Returns((BookModel)null);
 
-            BookController bookController = new BookController(bookServiceMock.Object);
+            BookController bookController = new BookController(bookServiceMock.Object, categoryServiceMock.Object);
 
             // Act & Assert
             bookController

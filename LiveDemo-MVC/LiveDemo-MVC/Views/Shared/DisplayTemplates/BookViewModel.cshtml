@@ -1,0 +1,16 @@
+﻿@model BookViewModel
+
+<div>
+    <div>
+        @Html.ActionLink(Model.Title, "Details", new { id = Model.Id })
+    </div>
+    <div>
+        by @Html.DisplayFor(m => m.Author)
+    </div>
+    <div>
+        @Html.DisplayFor(m => m.ISBN)
+    </div>
+    <div>
+        Web site: <a href="@Model.WebSite">@Model.WebSite</a>
+    </div>
+</div>

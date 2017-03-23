@@ -12,6 +12,7 @@ using LiveDemo_MVC.Auth.Models;
 using LiveDemo_MVC.Auth;
 using LiveDemo_MVC.Models;
 using LiveDemo_MVC.Auth.Contracts;
+using Bytes2you.Validation;
 
 namespace LiveDemo_MVC.Controllers
 {
@@ -23,6 +24,9 @@ namespace LiveDemo_MVC.Controllers
         
         public AccountController(ISignInService signInService, IUserService userService)
         {
+            Guard.WhenArgument(signInService, "signInService").IsNull().Throw();
+            Guard.WhenArgument(userService, "userService").IsNull().Throw();
+
             this.signInService = signInService;
             this.userService = userService;
         }

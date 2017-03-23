@@ -18,19 +18,20 @@ namespace LiveDemo_MVC.UnitTests.LiveDemo_MVC.Controllers.BookControllerTests
         {
             // Arrange
             var bookServiceMock = new Mock<IBookService>();
+            var categoryServiceMock = new Mock<ICategoryService>();
 
             // Act
-            BookController bookController = new BookController(bookServiceMock.Object);
+            BookController bookController = new BookController(bookServiceMock.Object, categoryServiceMock.Object);
 
             // Assert
             Assert.IsNotNull(bookController);
         }
 
         [TestMethod]
-        public void ThrowException_WhenParameterIsNull()
+        public void ThrowException_WhenParametersAreNull()
         {
             // Arrange & Act & Assert
-            Assert.ThrowsException<ArgumentNullException>(() => new BookController(null));
+            Assert.ThrowsException<ArgumentNullException>(() => new BookController(null, null));
         }
     }
 }
