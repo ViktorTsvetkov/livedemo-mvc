@@ -25,7 +25,7 @@ namespace LiveDemo_MVC.UnitTests.LiveDemo_MVC.Controllers.AccountControllerTests
                 .WithCallTo(c => c.Login(returnUrl))
                 .ShouldRenderDefaultView();
 
-            Assert.AreEqual("", accountController.ViewBag.ReturnUrl);
+            Assert.AreEqual(returnUrl, accountController.ViewBag.ReturnUrl);
         }
     }
 }
